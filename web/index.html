@@ -80,31 +80,81 @@
         ]
       };
 
+      function DataController(element, value) {
+        var self = this;
+
+        var element = element;
+        console.log(element);
+        var textElement = element.find('.pcvalue');
+        var barElement = element.find('.pcbar');
+
+        if (textElement == null || textElement.length === 0)
+          console.log("Problem loading text element");
+        else {
+          textElement.previousValue = value;
+          textElement.change(function() {
+            var newValue = $(this).val();
+            if ($(this).previousValue !== newValue) {
+              $(this).previousValue = newValue;
+              self.setValue(newValue);
+            }
+          })
+        }
+
+        if (barElement == null || barElement.length === 0)
+          console.log("Problem loading bar element")
+
+        this.currentValue = value;
+
+        this.setValue = function(newValue) {
+          // Validate against max
+          barElement.width(newValue + '%');
+        };
+      };
+
+      var userData = {};
+
       var createInputBox = function(value) {
+        var input = $('<input class="span1 pcvalue" type="number" value="' + value + '">');
         var box = $('<div class="input-append span1"></div>');
-        box.append($('<input class="span1 pc-value" type="number" value="' + value + '">'));
+        box.append(input);
         box.append($('<span class="add-on">%</span>'));
+
+        input.previousValue = value;
+        input.change(function() {
+          if ($(this).val() !== $(this).previousValue) {
+
+          }
+        });
 
         return box;
       };
 
-      var createBar = function(value, colour) {
-        return $('<div class="bar pc-bar ' + colour + '" style="width: ' + value + '%"></div>');
+      var createStackBar = function(id, value, colour) {
+        return $('<div id="' + id + '" class="bar pcbar ' + colour + '" style="width: ' + value + '%"></div>');
       };
 
       var createSingleBar = function(value) {
         var progress = $('<div class="progress progress-success"></div>');
-        progress.append(createBar(value, ''));
+        progress.append($('<div class="bar pcbar" style="width: ' + value + '%"></div>'));
         var bar = $('<div class="span11"></div>');
         bar.append(progress);
 
         return bar;
       };
 
-      var createRow = function(id, value) {
+      var createRow = function(overall, id, value) {
         var row = $('<div id="' + id + '" class="row"></div>');
         row.append(createInputBox(value));
         row.append(createSingleBar(value));
+
+        // Add to the overall
+        overall.append(createStackBar('stack' + id, value, 'bar-success'));
+
+        var controller = new DataController(row, value);
+        console.log(controller);
+        row.controller = controller;
+        userData[id] = controller;
 
         return row;
       };
@@ -119,10 +169,7 @@
         for (var i in categories.spending) {
           // Add a bar for this
           var catId = categories.spending[i];
-          spending.append(createRow(catId, initialValue));
-
-          // Add to the overall
-          overall.append(createBar(initialValue, 'bar-success'));
+          spending.append(createRow(overall, catId, initialValue));
         }
       });
     </script>
