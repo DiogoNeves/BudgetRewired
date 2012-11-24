@@ -1,0 +1,315 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tim",
+				"timestamp"
+			],
+			[
+				"incr",
+				"increment"
+			],
+			[
+				"increm",
+				"incrementWithCarry"
+			],
+			[
+				"ince",
+				"incrementWithCarry"
+			],
+			[
+				"incre",
+				"incrementWithCarry"
+			],
+			[
+				"sys",
+				"sysAddr"
+			],
+			[
+				"master",
+				"masterObj"
+			],
+			[
+				"system",
+				"systemFormat"
+			],
+			[
+				"masterR",
+				"masterRequest"
+			],
+			[
+				"path",
+				"stationMasterPathFormat"
+			],
+			[
+				"station",
+				"stationOpts"
+			],
+			[
+				"location",
+				"location_data"
+			],
+			[
+				"syste",
+				"system_format"
+			],
+			[
+				"request",
+				"request_format"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/Nodejs/Nodejs.sublime-build",
+	"command_palette":
+	{
+		"height": 87.0,
+		"selected_items":
+		[
+			[
+				"instal",
+				"Nodejs::NPM::Install"
+			],
+			[
+				"insta",
+				"Nodejs::NPM::Install"
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"Package Control: ins",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 125.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/diogoneves/Projects/common_sensor/web/noise.html",
+		"/Users/diogoneves/Projects/common_sensor/web/httpd.py",
+		"/Users/diogoneves/Library/Application Support/Sublime Text 2/Packages/Nodejs/Nodejs.sublime-settings",
+		"/Users/diogoneves/Library/Application Support/Sublime Text 2/Packages/Android/android.sublime-settings",
+		"/Users/diogoneves/Library/Application Support/Sublime Text 2/Packages/Android/android.py",
+		"/Users/diogoneves/Projects/common_sensor/android/.gitignore",
+		"/Users/diogoneves/Projects/eclipse/ScheduleAdvisory2/.gitignore",
+		"/Users/diogoneves/Projects/common_sensor/server/README.md",
+		"/Users/diogoneves/Projects/common_sensor/server/LICENSE",
+		"/Users/diogoneves/Projects/common_sensor/server/package.json",
+		"/Users/diogoneves/Projects/dumper/test.c",
+		"/Users/diogoneves/Projects/nand2tetris/01/DMux8Way.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/a/RAM8.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/a/Register.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/a/RAM64.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/b/RAM512.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/b/RAM4K.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/b/RAM16K.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/a/PC.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/ALU.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/03/a/Bit.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/Inc16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Mux4Way16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/Or16Way.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/ALU.out",
+		"/Users/diogoneves/Projects/nand2tetris/02/ALU.cmp",
+		"/Users/diogoneves/Projects/nand2tetris/02/And16Way.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/Add16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/FullAdder.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/HalfAdder.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Or8Way.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Or16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/And16To1.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Mux16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/02/ALU.tst",
+		"/Users/diogoneves/Projects/nand2tetris/02/Add16.cmp",
+		"/Users/diogoneves/Projects/nand2tetris/02/Add16.tst",
+		"/Users/diogoneves/Projects/nand2tetris/02/FullAdder.cmp",
+		"/Users/diogoneves/Projects/nand2tetris/02/FullAdder.tst",
+		"/Users/diogoneves/Projects/nand2tetris/02/HalfAdder.cmp",
+		"/Users/diogoneves/Projects/nand2tetris/02/HalfAdder.tst",
+		"/Users/diogoneves/Projects/nand2tetris/02/Inc16.cmp",
+		"/Users/diogoneves/Projects/nand2tetris/02/Inc16.tst",
+		"/Users/diogoneves/Projects/nand2tetris/01/DMux.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/DMux4Way.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Not16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Xor.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Mux8Way16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/nand.sublime-project",
+		"/Users/diogoneves/Projects/nand2tetris/01/Mux.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Or.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Nor.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/And16.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/And.hdl",
+		"/Users/diogoneves/Projects/nand2tetris/01/Not.hdl",
+		"/Users/diogoneves/Projects/xlocations/scanips.js",
+		"/Users/diogoneves/Projects/xlocations/quickinspector.html",
+		"/Users/diogoneves/Projects/xlocations/preview.html",
+		"/Users/diogoneves/Downloads/circleExample.kml",
+		"/Users/diogoneves/Projects/xlocations/httpd.py",
+		"/Users/diogoneves/Projects/httpd.py",
+		"/Users/diogoneves/Projects/quickinspector.html"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"draw",
+			"setData",
+			"Plot",
+			"plot",
+			"draw",
+			"setData",
+			"data",
+			"arguments",
+			"listPort",
+			"port",
+			".bat",
+			"*",
+			"[0..11]",
+			"[0..8]",
+			"RAM512",
+			"[0..2]",
+			", out=",
+			"Register(",
+			"Or(",
+			"And16To1",
+			"Add16To1",
+			"b\\[.+\\],",
+			"Or("
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"noiseData",
+			"listenPort",
+			"listPort",
+			"",
+			"[0..10]",
+			"[0..11]",
+			"RAM4K",
+			"[0..8]",
+			", address=address[0..2], out=",
+			"RAM8(",
+			"And(",
+			"b,",
+			"And("
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.git":
+	{
+		"height": 100.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}
