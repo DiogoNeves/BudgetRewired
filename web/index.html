@@ -80,13 +80,17 @@
         ]
       };
 
-      function DataController(element, value) {
+      function DataController(element, stackedBar, value) {
         var self = this;
 
+        this.value = value;
+
         var element = element;
-        console.log(element);
+        var stacked = stackedBar;
         var textElement = element.find('.pcvalue');
         var barElement = element.find('.pcbar');
+
+        element.controller = self;
 
         if (textElement == null || textElement.length === 0)
           console.log("Problem loading text element");
@@ -104,12 +108,14 @@
         if (barElement == null || barElement.length === 0)
           console.log("Problem loading bar element")
 
-        this.currentValue = value;
-
         this.setValue = function(newValue) {
-          // Validate against max
-          barElement.width(newValue + '%');
-        };
+          if (newValue !== self.value) {
+            var pc = newValue + '%';
+            stacked.width(pc);
+            barElement.width(pc);
+            self.value = newValue;
+          }
+        }
       };
 
       var userData = {};
@@ -119,13 +125,6 @@
         var box = $('<div class="input-append span1"></div>');
         box.append(input);
         box.append($('<span class="add-on">%</span>'));
-
-        input.previousValue = value;
-        input.change(function() {
-          if ($(this).val() !== $(this).previousValue) {
-
-          }
-        });
 
         return box;
       };
@@ -143,18 +142,10 @@
         return bar;
       };
 
-      var createRow = function(overall, id, value) {
+      var createRow = function(id, value) {
         var row = $('<div id="' + id + '" class="row"></div>');
         row.append(createInputBox(value));
         row.append(createSingleBar(value));
-
-        // Add to the overall
-        overall.append(createStackBar('stack' + id, value, 'bar-success'));
-
-        var controller = new DataController(row, value);
-        console.log(controller);
-        row.controller = controller;
-        userData[id] = controller;
 
         return row;
       };
@@ -167,9 +158,17 @@
         var initialValue = 100 / totalCategories;
         var remaining = 100 % totalCategories;
         for (var i in categories.spending) {
-          // Add a bar for this
           var catId = categories.spending[i];
-          spending.append(createRow(overall, catId, initialValue));
+
+          var row = createRow(catId, initialValue);
+          spending.append(row);
+
+          // Add to the overall
+          var stackedBar = createStackBar('stack' + catId, initialValue, 'bar-success');
+          overall.append(stackedBar);
+
+          var controller = new DataController(row, stackedBar, initialValue);
+          userData[catId] = controller;
         }
       });
     </script>
