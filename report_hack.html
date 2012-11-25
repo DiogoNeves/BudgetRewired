@@ -56,45 +56,43 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
-        <h2>Report</h2>
+        <h2>£683,000,000,000 (2011 - 2012)</h2>
+        <h3>Report</h3>
       </div>
 
       <div class="row">
         <div id="user" class="container span12">
-          <!-- <div class="row">
-            <div id="overall-tax" class="progress span12">
-            </div>
-          </div> -->
-
           <h4>Your choice</h4>
           <div class="row">
-            <div id="user-overall-spending" class="progress span12" style="height: 30px">
+            <div id="user-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="user-spending-overall" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
 
         <div id="gov" class="container span12">
-          <!-- <div class="row">
-            <div id="overall-tax" class="progress span12">
-            </div>
-          </div> -->
-
           <h4>Government Spending</h4>
           <div class="row">
-            <div id="gov-overall-spending" class="progress span12" style="height: 30px">
+            <div id="gov-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="gov-spending-overall" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
 
         <div id="average" class="container span12">
-          <!-- <div class="row">
-            <div id="overall-tax" class="progress span12">
-            </div>
-          </div> -->
-
           <h4>Average of all users</h4>
           <div class="row">
-            <div id="avg-overall-spending" class="progress span12" style="height: 30px">
+            <div id="avg-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="avg-spending-overall" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -108,12 +106,12 @@
 
     <script src="/budget.js"></script>
     <script type="text/javascript">
-      var createStack = function(prefix, stack, data) {
+      var createStack = function(categories, prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
           sum += +value;
-          var colourId = budget.categories.spending[c];
+          var colourId = categories[c];
 
           // Add to the overall
           var stackedBar = budget.createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
@@ -143,20 +141,30 @@
       $(document).ready(function() {
         socket = io.connect(window.location.origin)
 
-        var user = $("#user-overall-spending");
-        var gov = $("#gov-overall-spending");
-        var average = $("#avg-overall-spending");
+        var user = $("#user-spending-overall");
+        var gov = $("#gov-spending-overall");
+        var average = $("#avg-spending-overall");
 
-        createStack('user-', user, submission);
-        createStack('gov-', gov, budget.govData);
+        var usert = $("#user-tax-overall");
+        var govt = $("#gov-tax-overall");
+        var averaget = $("#avg-tax-overall");
+
+        createStack(budget.categories.spending, 'user-spending', user, submission.spending);
+        createStack(budget.categories.spending, 'gov-spending', gov, budget.govData.spending);
+
+        createStack(budget.categories.taxes, 'user-tax', usert, submission.taxes);
+        createStack(budget.categories.taxes, 'gov-tax', govt, budget.govData.taxes);
 
         socket.on('setavg', function (data) {
           average.empty();
-          createStack('avg-', average, data);
+          averaget.empty();
+          createStack(budget.categories.spending, 'avg-spending', average, data.spending);
+          createStack(budget.categories.taxes, 'avg-taxes', averaget, data.taxes);
         });
 
         socket.on('uptavg', function (data) {
-          updateStack('avg-', average, data);
+          updateStack('avg-spending', average, data.spending);
+          updateStack('avg-taxes', averaget, data.taxes);
         });
       });
 

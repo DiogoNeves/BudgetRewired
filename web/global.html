@@ -48,33 +48,32 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
-        <h2>Global View</h2>
+        <h2>£683,000,000,000 (2011 - 2012)</h2>
+        <h3>Global View</h3>
         <h4>Yes, this is the first time we're testing with more than 2 people!</h4>
       </div>
 
       <div class="row">
         <div id="gov" class="container span12">
-          <!-- <div class="row">
-            <div id="overall-tax" class="progress span12">
-            </div>
-          </div> -->
-
           <h4>Government Spending</h4>
           <div class="row">
-            <div id="gov-overall-spending" class="progress span12" style="height: 30px">
+            <div id="gov-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="gov-spending-overall" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
 
         <div id="average" class="container span12">
-          <!-- <div class="row">
-            <div id="overall-tax" class="progress span12">
-            </div>
-          </div> -->
-
           <h4>Average of all users</h4>
           <div class="row">
-            <div id="avg-overall-spending" class="progress span12" style="height: 30px">
+            <div id="avg-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="avg-spending-overall" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -109,12 +108,12 @@
         }
       };
 
-      var createStack = function(prefix, stack, data) {
+      var createStack = function(categories, prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
           sum += +value;
-          var colourId = budget.categories.spending[c];
+          var colourId = categories[c];
 
           // Add to the overall
           var stackedBar = budget.createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
@@ -134,18 +133,26 @@
           $('#address').text("Please connect to " + socket.socket.options.host);
         });
 
-        var gov = $("#gov-overall-spending");
-        var average = $("#avg-overall-spending");
+        var gov = $("#gov-spending-overall");
+        var average = $("#avg-spending-overall");
 
-        createStack('gov-', gov, budget.govData);
+        var govt = $("#gov-tax-overall");
+        var averaget = $("#avg-tax-overall");
+
+        createStack(budget.categories.spending, 'gov-spending', gov, budget.govData.spending);
+        createStack(budget.categories.taxes, 'gov-tax', govt, budget.govData.taxes);
 
         socket.on('setavg', function (data) {
           average.empty();
-          createStack('avg-', average, data);
+          averaget.empty();
+          createStack(budget.categories.spending, 'avg-spending', average, data.spending);
+          createStack(budget.categories.taxes, 'avg-tax', averaget, data.taxes);
         });
 
         socket.on('uptavg', function (data) {
-          updateStack('avg-', average, data);
+          console.log(data);
+          updateStack('avg-spending', average, data.spending);
+          updateStack('avg-tax', averaget, data.taxes);
         });
       });
 

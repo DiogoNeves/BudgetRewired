@@ -45,16 +45,26 @@
   </head>
   <body>
 
-    <div class="container">
+    <div class="container-fluid">
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
-        <h2>£683000000000</h2>
+        <h2>£683,000,000,000 (2011 - 2012)</h2>
+        <h3>Choose yours</h3>
       </div>
 
-      <div class="row">
-        <div id="spending" class="container span12">
+      <div class="row-fluid">
+        <div id="taxes" class="container span6">
+          <h4>Overall taxes</h4>
+          <div class="row-fluid">
+            <div id="overall-taxes" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <hr>
+        </div>
+
+        <div id="spending" class="container span6">
           <h4>Overall spending</h4>
-          <div class="row">
+          <div class="row-fluid">
             <div id="overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
@@ -62,7 +72,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row-fluid">
         <div class="btn-group span1 offset11">
           <button id="submit-btn" class="btn btn-primary">Submit</button>
         </div>
@@ -74,12 +84,23 @@
 
     <script src="/budget.js"></script>
     <script type="text/javascript">
-      var userData = {};
+      var userData = {
+        taxes: {},
+        spending: {}
+      };
 
       var isOver = function() {
         var sum = +0;
-        for (var i in userData) {
-          var value = +userData[i].getValue();
+        for (var i in userData.taxes) {
+          var value = +userData.taxes[i].getValue();
+          sum += value;
+        }
+        if (sum > +100)
+          return true;
+
+        sum = +0;
+        for (var i in userData.spending) {
+          var value = +userData.spending[i].getValue();
           sum += value;
         }
 
@@ -104,7 +125,7 @@
           textElement.previousValue = _value;
           textElement.change(function() {
             var newValue = $(this).val();
-            var isValid = newValue !== undefined && newValue != null && (+newValue) + '' === newValue;
+            var isValid = newValue !== undefined && newValue != null && (+newValue) + '' === newValue && (+newValue) >= 0;
             var prev = _value;
             if (!(isValid && self.setValue(prev, newValue)))
               $(this).val(prev);
@@ -138,8 +159,8 @@
       };
 
       var createInputBox = function(value) {
-        var input = $('<input class="span1 pcvalue" type="number" value="' + value + '">');
-        var box = $('<div class="input-append span1"></div>');
+        var input = $('<input class="span8 pcvalue" type="number" value="' + value + '">');
+        var box = $('<div class="input-append span2"></div>');
         input.previousValue = value;
         box.append(input);
         box.append($('<span class="add-on">%</span>'));
@@ -148,16 +169,16 @@
       };
 
       var createSingleBar = function(value, colour) {
-        var progress = $('<div class="progress" style="height: 30px"></div>');
+        var progress = $('<div class="progress span12" style="height: 30px"></div>');
         progress.append($('<div class="bar pcbar ' + colour + '" style="width: ' + value + '%"></div>'));
-        var bar = $('<div class="span11"></div>');
+        var bar = $('<div class="span10"></div>');
         bar.append(progress);
 
         return bar;
       };
 
       var createRow = function(id, value, colour) {
-        var row = $('<div id="' + id + '" class="row"></div>');
+        var row = $('<div id="' + id + '" class="row-fluid"></div>');
         row.append(createInputBox(value));
         row.append(createSingleBar(value, colour));
 
@@ -165,23 +186,26 @@
       };
 
       var getBudgetData = function(data) {
-        var budget = {};
-        for (var k in data)
-          budget[k] = data[k].getValue();
+        var budget = {
+          taxes: {},
+          spending: {}
+        };
+
+        for (var k in data.taxes)
+          budget.taxes[k] = data.taxes[k].getValue();
+        for (var k in data.spending)
+          budget.spending[k] = data.spending[k].getValue();
 
         return budget;
       };
 
-      $(document).ready(function() {
-        var spending = $("#spending");
-        var overall = $("#overall-spending");
-
+      var createCategories = function(element, overall, categories, userData) {
         var totalCategories = budget.totalCategories;
         var initialValue = Math.floor(100 / totalCategories);
         var remaining = 100 % totalCategories;
-        for (var i in budget.categories.spending) {
+        for (var i in categories) {
           var catId = i;
-          var colourId = budget.categories.spending[i];
+          var colourId = categories[i];
 
           var value = initialValue;
           if (remaining > 0) {
@@ -190,8 +214,8 @@
           }
 
           var row = createRow(catId, value, colourId);
-          spending.append($('<h5 style="margin: 0">' + catId + '</h5>'));
-          spending.append(row);
+          element.append($('<h5 style="margin: 0">' + catId + '</h5>'));
+          element.append(row);
 
           // Add to the overall
           var stackedBar = budget.createStackBar('stack' + catId.replace(' ', '_'), value, colourId);
@@ -200,8 +224,19 @@
           var controller = new DataController(row, stackedBar, value);
           userData[catId] = controller;
         }
+      };
+
+      $(document).ready(function() {
+        var taxes = $("#taxes");
+        var taxOverall = $("#overall-taxes");
+        var spending = $("#spending");
+        var spendOverall = $("#overall-spending");
+
+        createCategories(taxes, taxOverall, budget.categories.taxes, userData.taxes);
+        createCategories(spending, spendOverall, budget.categories.spending, userData.spending);
 
         $("#submit-btn").click(function() {
+          console.log(userData);
           $.post(window.location.origin + '/post/budget', getBudgetData(userData), function(result) {
             if (result != null && result !== undefined && result.result === "OK") {
               window.open(window.location.origin + "/report.html?key=" + result.key, '_self', '', false);

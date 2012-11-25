@@ -3,12 +3,22 @@ var budget = budget || {};
 budget.totalCategories = 6;
 
 budget.govData = {
-	"Health": 19,
-	"Education": 13,
-	"Social Protection": 30,
-	"Defense": 6,
-	"Debt Interest": 7,
-	"Other": 25
+	taxes: {
+		"Borrowing": 13,
+		"Income Tax": 23,
+		"Corporation Tax": 7,
+		"VAT": 15,
+		"National Insurance": 16,
+		"Other": 26
+	},
+	spending: {
+		"Health": 19,
+		"Education": 13,
+		"Social Protection": 30,
+		"Defense": 6,
+		"Debt Interest": 7,
+		"Other": 25
+	}
 };
 
 budget.categories = {
@@ -17,7 +27,7 @@ budget.categories = {
 		"Income Tax": "tax-colour-2",
 		"Corporation Tax": "tax-colour-3",
 		"VAT": "tax-colour-4",
-		"National Interest": "tax-colour-5",
+		"National Insurance": "tax-colour-5",
 		"Other": "tax-colour-6"
 	},
 

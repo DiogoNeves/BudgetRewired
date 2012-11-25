@@ -5,32 +5,47 @@ var io = require('socket.io').listen(server);
 var crypto = require('crypto');
 var fs = require('fs');
 
-var validCategories = [
-	"Health", "Education", "Social Protection", "Defense", "Debt Interest", "Other"
-];
+var validCategories = {
+	taxes: [ "Borrowing", "Income Tax", "Corporation Tax", "VAT", "National Insurance", "Other" ],
+	spending: [ "Health", "Education", "Social Protection", "Defense", "Debt Interest", "Other" ]
+};
 
 function BudgetDatabase() {
 	var self = this;
 
 	var budgetData = {
 		numOfSubmissions: +0,
-		totals: {}
+		totals: {
+			taxes: {},
+			spending: {}
+		}
 	};
 
 	var submissionData = {
 		budgets: {}
 	}
 
-	for (var c in validCategories) {
-		var category = validCategories[c];
-		budgetData.totals[category] = +0;
+	for (var c in validCategories.spending) {
+		var category = validCategories.spending[c];
+		budgetData.totals.spending[category] = +0;
+	}
+
+	for (var c in validCategories.taxes) {
+		var category = validCategories.taxes[c];
+		budgetData.totals.taxes[category] = +0;
 	}
 
 	this.addBudget = function(budget) {
 		++budgetData.numOfSubmissions;
-		for (var c in validCategories) {
-			var category = validCategories[c];
-			budgetData.totals[category] += +budget[category];
+
+		for (var c in validCategories.spending) {
+			var category = validCategories.spending[c];
+			budgetData.totals.spending[category] += +budget.spending[category];
+		}
+
+		for (var c in validCategories.taxes) {
+			var category = validCategories.taxes[c];
+			budgetData.totals.taxes[category] += +budget.taxes[category];
 		}
 
 		var key = budgetData.numOfSubmissions + '';
@@ -40,18 +55,35 @@ function BudgetDatabase() {
 	};
 
 	this.calculateAverage = function() {
-		var average = {};
+		var average = {
+			taxes: {},
+			spending: {}
+		};
 		var sum = +0;
-		for (var c in validCategories) {
-			var category = validCategories[c];
-			average[category] = budgetData.totals[category] / budgetData.numOfSubmissions;
-			sum += average[category];
+		for (var c in validCategories.taxes) {
+			var category = validCategories.taxes[c];
+			average.taxes[category] = budgetData.totals.taxes[category] / budgetData.numOfSubmissions;
+			sum += average.taxes[category];
 		}
 
 		if (sum !== +100) {
-			average[validCategories[0]] += +100 - sum;
-			console.log('WARN: Had to tweak the average');
+			average.taxes[validCategories.taxes[0]] += +100 - sum;
+			console.log('WARN: Had to tweak the average ' + sum);
 		}
+
+		sum = +0;
+		for (var c in validCategories.spending) {
+			var category = validCategories.spending[c];
+			average.spending[category] = budgetData.totals.spending[category] / budgetData.numOfSubmissions;
+			sum += average.spending[category];
+		}
+
+		if (sum !== +100) {
+			average.spending[validCategories.spending[0]] += +100 - sum;
+			console.log('WARN: Had to tweak the average ' + sum);
+		}
+
+		console.log(average);
 
 		return average;
 	};
@@ -123,20 +155,32 @@ app.get('/debug', function(req, res) {
 
 var purifyBudget = function(budget) {
 	var purified = null;
-	if (budget != null && budget !== undefined) {
-		purified = {};
+	if (budget != null && budget !== undefined && budget.taxes != null && budget.spending != null) {
+		purified = {
+			taxes: {},
+			spending: {}
+		};
 		var sum = +0;
 
-		for (var c in validCategories) {
-			var category = validCategories[c];
-			if (budget[category] === undefined || budget[category] == null)
+		for (var c in validCategories.taxes) {
+			var category = validCategories.taxes[c];
+			if (budget.taxes[category] === undefined || budget.taxes[category] == null)
 				return null;
 
-			purified[category] = +budget[category];
-			sum += +budget[category];
+			purified.taxes[category] = +budget.taxes[category];
+			sum += +budget.taxes[category];
 		}
 
-		if (sum !== +100) {
+		for (var c in validCategories.spending) {
+			var category = validCategories.spending[c];
+			if (budget.spending[category] === undefined || budget.spending[category] == null)
+				return null;
+
+			purified.spending[category] = +budget.spending[category];
+			sum += +budget.spending[category];
+		}
+
+		if (sum !== +200) {
 			console.log('Invalid sum ' + sum);
 			return null;
 		}
