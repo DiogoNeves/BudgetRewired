@@ -121,21 +121,44 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
-        <h2>£600bn</h2>
+        <h2>Report</h2>
       </div>
 
       <div class="row">
-        <div id="spending" class="container span12">
+        <div id="user" class="container span12">
+          <!-- <div class="row">
+            <div id="overall-tax" class="progress span12">
+            </div>
+          </div> -->
+
           <div class="row">
-            <div id="overall-spending" class="progress span12">
+            <div id="user-overall-spending" class="progress span12">
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="btn-group span1 offset11">
-          <button id="submit-btn" class="btn btn-primary">Submit</button>
+        <div id="gov" class="container span12">
+          <!-- <div class="row">
+            <div id="overall-tax" class="progress span12">
+            </div>
+          </div> -->
+
+          <div class="row">
+            <div id="gov-overall-spending" class="progress span12">
+            </div>
+          </div>
+        </div>
+
+        <div id="average" class="container span12">
+          <!-- <div class="row">
+            <div id="overall-tax" class="progress span12">
+            </div>
+          </div> -->
+
+          <div class="row">
+            <div id="avg-overall-spending" class="progress span12">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -143,67 +166,22 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
+    <script src="/socket.io/socket.io.js"></script>
+
     <script type="text/javascript">
       var categories = {
         taxes: [
           "Borrowing", "Income Tax", "Corporation Tax", "VAT", "National Interest", "Other"
         ],
-        spending: [
-          "Health", "Education", "Social Protection", "Defense", "Debt Interest", "Other"
-        ]
-      };
 
-      function DataController(element, stackedBar, value) {
-        var self = this;
-
-        var _value = value;
-
-        var element = element;
-        var stacked = stackedBar;
-        var textElement = element.find('.pcvalue');
-        var barElement = element.find('.pcbar');
-
-        element.controller = self;
-
-        if (textElement == null || textElement.length === 0)
-          console.log("Problem loading text element");
-        else {
-          textElement.previousValue = _value;
-          textElement.change(function() {
-            var newValue = $(this).val();
-            if ($(this).previousValue !== newValue) {
-              $(this).previousValue = newValue;
-              self.setValue(newValue);
-            }
-          })
+        spending: {
+          "Health": "spend-colour-1",
+          "Education": "spend-colour-2",
+          "Social Protection": "spend-colour-3",
+          "Defense": "spend-colour-4",
+          "Debt Interest": "spend-colour-5",
+          "Other": "spend-colour-6"
         }
-
-        if (barElement == null || barElement.length === 0)
-          console.log("Problem loading bar element")
-
-        this.setValue = function(newValue) {
-          if (newValue !== _value) {
-            var pc = newValue + '%';
-            stacked.width(pc);
-            barElement.width(pc);
-            _value = newValue;
-          }
-        };
-
-        this.getValue = function() {
-          return _value;
-        };
-      };
-
-      var userData = {};
-
-      var createInputBox = function(value) {
-        var input = $('<input class="span1 pcvalue" type="number" value="' + value + '">');
-        var box = $('<div class="input-append span1"></div>');
-        box.append(input);
-        box.append($('<span class="add-on">%</span>'));
-
-        return box;
       };
 
       var createStackBar = function(id, value, colour) {
@@ -212,67 +190,52 @@
         return stacked;
       };
 
-      var createSingleBar = function(value, colour) {
-        var progress = $('<div class="progress"></div>');
-        progress.append($('<div class="bar pcbar ' + colour + '" style="width: ' + value + '%"></div>'));
-        var bar = $('<div class="span11"></div>');
-        bar.append(progress);
-
-        return bar;
-      };
-
-      var createRow = function(id, value, colour) {
-        var row = $('<div id="' + id + '" class="row"></div>');
-        row.append(createInputBox(value));
-        row.append(createSingleBar(value, colour));
-
-        return row;
-      };
-
-      var getBudgetData = function(data) {
-        var budget = {};
-        for (var k in data)
-          budget[k] = data[k].getValue();
-
-        return budget;
-      };
-
-      $(document).ready(function() {
-        var spending = $("#spending");
-        var overall = $("#overall-spending");
-
-        var totalCategories = categories.spending.length;
-        var initialValue = Math.floor(100 / totalCategories);
-        var remaining = 100 % totalCategories;
-        for (var i in categories.spending) {
-          var catId = categories.spending[i];
-          var colourId = 'spend-colour-' + (+i + 1);
-
-          var value = initialValue;
-          if (remaining > 0) {
-            ++value;
-            --remaining;
-          }
-
-          var row = createRow(catId, value, colourId);
-          spending.append(row);
+      var createStack = function(stack, data) {
+        var sum = 0;
+        for (var c in data) {
+          var value = data[c];
+          sum += +value;
+          var colourId = categories.spending[c];
 
           // Add to the overall
-          var stackedBar = createStackBar('stack' + catId.replace(' ', '_'), value, colourId);
-          overall.append(stackedBar);
-
-          var controller = new DataController(row, stackedBar, value);
-          userData[catId] = controller;
+          var stackedBar = createStackBar('stack' + c.replace(' ', '_'), value, colourId);
+          stack.append(stackedBar);
         }
 
-        $("#submit-btn").click(function() {
-          $.post(window.location.origin + '/post/budget', getBudgetData(userData), function(result) {
-            if (result != null && result !== undefined && result.result === "OK") {
-              window.open(window.location.origin + "/view/report/" + result.key, '_self', '', false);
-            } else {
-              console.log(result.msg);
-            }
-          });
+        if (sum !== +100) {
+          console.log('WARN: Had to tweak the average');
+        }
+      };
+
+      var updateStack = function(stack, data) {
+        var sum = 0;
+        for (var c in data) {
+          var value = data[c];
+          sum += +value;
+          var stackedBar = $('#stack' + c.replace(' ', '_')).width(value + '%');
+        }
+
+        if (sum !== +100) {
+          console.log('WARN: Had to tweak the average');
+        }
+      };
+
+      var socket = null;
+
+      $(document).ready(function() {
+        socket = io.connect(window.location.origin)
+
+        var user = $("#user-overall-spending");
+        var gov = $("#gov-overall-spending");
+        var average = $("#avg-overall-spending");
+
+        socket.on('setavg', function (data) {
+          average.empty();
+          createStack(average, data);
+        });
+
+        socket.on('uptavg', function (data) {
+          updateStack(average, data);
         });
       });
     </script>
