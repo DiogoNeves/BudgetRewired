@@ -37,14 +37,6 @@
         padding: 14px 24px;
       }
 
-      /* Supporting marketing content */
-      .marketing {
-        margin: 60px 0;
-      }
-      .marketing p + h4 {
-        margin-top: 28px;
-      }
-
       .spend-colour-1 {
         background-color: #5EB95E !important;
         background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
@@ -122,6 +114,7 @@
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
         <h2>Global View</h2>
+        <h4>Yes, this is the first time we're testing with more than 2 people!</h4>
       </div>
 
       <div class="row">
@@ -131,8 +124,9 @@
             </div>
           </div> -->
 
+          <h4>Government Spending</h4>
           <div class="row">
-            <div id="gov-overall-spending" class="progress span12">
+            <div id="gov-overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -143,8 +137,9 @@
             </div>
           </div> -->
 
+          <h4>Average of all users</h4>
           <div class="row">
-            <div id="avg-overall-spending" class="progress span12">
+            <div id="avg-overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -156,47 +151,14 @@
 
     <script src="/socket.io/socket.io.js"></script>
 
+    <script src="/budget.js"></script>
     <script type="text/javascript">
-      var categories = {
-        taxes: [
-          "Borrowing", "Income Tax", "Corporation Tax", "VAT", "National Interest", "Other"
-        ],
-
-        spending: {
-          "Health": "spend-colour-1",
-          "Education": "spend-colour-2",
-          "Social Protection": "spend-colour-3",
-          "Defense": "spend-colour-4",
-          "Debt Interest": "spend-colour-5",
-          "Other": "spend-colour-6"
-        }
-      };
-
-      var govData = {
-        "Health": 17,
-        "Education": 17,
-        "Social Protection": 17,
-        "Defense": 17,
-        "Debt Interest": 16,
-        "Other": 16
-      };
-
-      var createStackBar = function(id, value, colour) {
-        var stacked = $('<div id="' + id + '" class="bar pcbar" style="width: ' + value + '%"></div>');
-        stacked.addClass(colour);
-        return stacked;
-      };
-
-      var createStack = function(prefix, stack, data) {
+      var updateStack = function(prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
           sum += +value;
-          var colourId = categories.spending[c];
-
-          // Add to the overall
-          var stackedBar = createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
-          stack.append(stackedBar);
+          var stackedBar = $('#' + prefix + 'stack' + c.replace(' ', '_')).width(value + '%');
         }
 
         if (sum !== +100) {
@@ -204,12 +166,16 @@
         }
       };
 
-      var updateStack = function(prefix, stack, data) {
+      var createStack = function(prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
           sum += +value;
-          var stackedBar = $('#' + prefix + 'stack' + c.replace(' ', '_')).width(value + '%');
+          var colourId = budget.categories.spending[c];
+
+          // Add to the overall
+          var stackedBar = budget.createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
+          stack.append(stackedBar);
         }
 
         if (sum !== +100) {
@@ -225,7 +191,7 @@
         var gov = $("#gov-overall-spending");
         var average = $("#avg-overall-spending");
 
-        createStack('gov-', gov, govData);
+        createStack('gov-', gov, budget.govData);
 
         socket.on('setavg', function (data) {
           average.empty();

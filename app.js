@@ -9,15 +9,6 @@ var validCategories = [
 	"Health", "Education", "Social Protection", "Defense", "Debt Interest", "Other"
 ];
 
-var govData = {
-	"Health": 17,
-	"Education": 17,
-	"Social Protection": 17,
-	"Defense": 17,
-	"Debt Interest": 16,
-	"Other": 16
-};
-
 function BudgetDatabase() {
 	var self = this;
 
@@ -110,7 +101,6 @@ app.get('/report.html', function(req, res) {
 		res.write(report_hack);
 
 		var script = "var submission = " + JSON.stringify(submission) + ';';
-		script += "\nvar govData = " + JSON.stringify(govData) + ';';
 
 		res.write(script);
 		res.write(footer_hack);

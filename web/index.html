@@ -121,15 +121,17 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
-        <h2>£600bn</h2>
+        <h2>£683000000000</h2>
       </div>
 
       <div class="row">
         <div id="spending" class="container span12">
+          <h4>Overall spending</h4>
           <div class="row">
-            <div id="overall-spending" class="progress span12">
+            <div id="overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
+          <hr>
         </div>
       </div>
 
@@ -143,16 +145,8 @@
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
+    <script src="/budget.js"></script>
     <script type="text/javascript">
-      var categories = {
-        taxes: [
-          "Borrowing", "Income Tax", "Corporation Tax", "VAT", "National Interest", "Other"
-        ],
-        spending: [
-          "Health", "Education", "Social Protection", "Defense", "Debt Interest", "Other"
-        ]
-      };
-
       var userData = {};
 
       var isOver = function() {
@@ -226,14 +220,8 @@
         return box;
       };
 
-      var createStackBar = function(id, value, colour) {
-        var stacked = $('<div id="' + id + '" class="bar pcbar" style="width: ' + value + '%"></div>');
-        stacked.addClass(colour);
-        return stacked;
-      };
-
       var createSingleBar = function(value, colour) {
-        var progress = $('<div class="progress"></div>');
+        var progress = $('<div class="progress" style="height: 30px"></div>');
         progress.append($('<div class="bar pcbar ' + colour + '" style="width: ' + value + '%"></div>'));
         var bar = $('<div class="span11"></div>');
         bar.append(progress);
@@ -261,12 +249,12 @@
         var spending = $("#spending");
         var overall = $("#overall-spending");
 
-        var totalCategories = categories.spending.length;
+        var totalCategories = budget.totalCategories;
         var initialValue = Math.floor(100 / totalCategories);
         var remaining = 100 % totalCategories;
-        for (var i in categories.spending) {
-          var catId = categories.spending[i];
-          var colourId = 'spend-colour-' + (+i + 1);
+        for (var i in budget.categories.spending) {
+          var catId = i;
+          var colourId = budget.categories.spending[i];
 
           var value = initialValue;
           if (remaining > 0) {
@@ -275,10 +263,11 @@
           }
 
           var row = createRow(catId, value, colourId);
+          spending.append($('<h5 style="margin: 0">' + catId + '</h5>'));
           spending.append(row);
 
           // Add to the overall
-          var stackedBar = createStackBar('stack' + catId.replace(' ', '_'), value, colourId);
+          var stackedBar = budget.createStackBar('stack' + catId.replace(' ', '_'), value, colourId);
           overall.append(stackedBar);
 
           var controller = new DataController(row, stackedBar, value);

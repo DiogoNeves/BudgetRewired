@@ -131,8 +131,9 @@
             </div>
           </div> -->
 
+          <h4>Your choice</h4>
           <div class="row">
-            <div id="user-overall-spending" class="progress span12">
+            <div id="user-overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -143,8 +144,9 @@
             </div>
           </div> -->
 
+          <h4>Government Spending</h4>
           <div class="row">
-            <div id="gov-overall-spending" class="progress span12">
+            <div id="gov-overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -155,8 +157,9 @@
             </div>
           </div> -->
 
+          <h4>Average of all users</h4>
           <div class="row">
-            <div id="avg-overall-spending" class="progress span12">
+            <div id="avg-overall-spending" class="progress span12" style="height: 30px">
             </div>
           </div>
         </div>
@@ -168,37 +171,17 @@
 
     <script src="/socket.io/socket.io.js"></script>
 
+    <script src="/budget.js"></script>
     <script type="text/javascript">
-      var categories = {
-        taxes: [
-          "Borrowing", "Income Tax", "Corporation Tax", "VAT", "National Interest", "Other"
-        ],
-
-        spending: {
-          "Health": "spend-colour-1",
-          "Education": "spend-colour-2",
-          "Social Protection": "spend-colour-3",
-          "Defense": "spend-colour-4",
-          "Debt Interest": "spend-colour-5",
-          "Other": "spend-colour-6"
-        }
-      };
-
-      var createStackBar = function(id, value, colour) {
-        var stacked = $('<div id="' + id + '" class="bar pcbar" style="width: ' + value + '%"></div>');
-        stacked.addClass(colour);
-        return stacked;
-      };
-
       var createStack = function(prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
           sum += +value;
-          var colourId = categories.spending[c];
+          var colourId = budget.categories.spending[c];
 
           // Add to the overall
-          var stackedBar = createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
+          var stackedBar = budget.createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
           stack.append(stackedBar);
         }
 
@@ -230,7 +213,7 @@
         var average = $("#avg-overall-spending");
 
         createStack('user-', user, submission);
-        createStack('gov-', gov, govData);
+        createStack('gov-', gov, budget.govData);
 
         socket.on('setavg', function (data) {
           average.empty();
