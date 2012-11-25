@@ -3,10 +3,20 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 var crypto = require('crypto');
+var fs = require('fs');
 
 var validCategories = [
 	"Health", "Education", "Social Protection", "Defense", "Debt Interest", "Other"
 ];
+
+var govData = {
+	"Health": 17,
+	"Education": 17,
+	"Social Protection": 17,
+	"Defense": 17,
+	"Debt Interest": 16,
+	"Other": 16
+};
 
 function BudgetDatabase() {
 	var self = this;
@@ -89,11 +99,26 @@ app.get('/', function(req, res) {
 });
 
 app.get('/view/global', function(req, res) {
-	res.end('nothing yet');
+	res.sendfile(__dirname + '/web/global.html');
 });
 
-app.get('/view/report/:key', function(req, res) {
-	res.end(req.params.key);
+var report_hack = fs.readFileSync('report_hack.html', 'utf-8');
+var footer_hack = "\n</script>\n</body>\n</html>";
+app.get('/report.html', function(req, res) {
+	var submission = allBudgetData.getBudget(req.query.key);
+	if (submission != null && submission !== undefined) {
+		res.write(report_hack);
+
+		var script = "var submission = " + JSON.stringify(submission) + ';';
+		script += "\nvar govData = " + JSON.stringify(govData) + ';';
+
+		res.write(script);
+		res.write(footer_hack);
+	} else {
+		res.write(req.query.key || '');
+	}
+
+	res.end();
 });
 
 app.get('/debug', function(req, res) {

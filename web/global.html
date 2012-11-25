@@ -121,22 +121,10 @@
     <div class="container">
       <div class="jumbotron">
         <h1>Budget Rewired</h1>
-        <h2>Report</h2>
+        <h2>Global View</h2>
       </div>
 
       <div class="row">
-        <div id="user" class="container span12">
-          <!-- <div class="row">
-            <div id="overall-tax" class="progress span12">
-            </div>
-          </div> -->
-
-          <div class="row">
-            <div id="user-overall-spending" class="progress span12">
-            </div>
-          </div>
-        </div>
-
         <div id="gov" class="container span12">
           <!-- <div class="row">
             <div id="overall-tax" class="progress span12">
@@ -184,13 +172,22 @@
         }
       };
 
+      var govData = {
+        "Health": 17,
+        "Education": 17,
+        "Social Protection": 17,
+        "Defense": 17,
+        "Debt Interest": 16,
+        "Other": 16
+      };
+
       var createStackBar = function(id, value, colour) {
         var stacked = $('<div id="' + id + '" class="bar pcbar" style="width: ' + value + '%"></div>');
         stacked.addClass(colour);
         return stacked;
       };
 
-      var createStack = function(stack, data) {
+      var createStack = function(prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
@@ -198,7 +195,7 @@
           var colourId = categories.spending[c];
 
           // Add to the overall
-          var stackedBar = createStackBar('stack' + c.replace(' ', '_'), value, colourId);
+          var stackedBar = createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
           stack.append(stackedBar);
         }
 
@@ -207,12 +204,12 @@
         }
       };
 
-      var updateStack = function(stack, data) {
+      var updateStack = function(prefix, stack, data) {
         var sum = 0;
         for (var c in data) {
           var value = data[c];
           sum += +value;
-          var stackedBar = $('#stack' + c.replace(' ', '_')).width(value + '%');
+          var stackedBar = $('#' + prefix + 'stack' + c.replace(' ', '_')).width(value + '%');
         }
 
         if (sum !== +100) {
@@ -225,19 +222,21 @@
       $(document).ready(function() {
         socket = io.connect(window.location.origin)
 
-        var user = $("#user-overall-spending");
         var gov = $("#gov-overall-spending");
         var average = $("#avg-overall-spending");
 
+        createStack('gov-', gov, govData);
+
         socket.on('setavg', function (data) {
           average.empty();
-          createStack(average, data);
+          createStack('avg-', average, data);
         });
 
         socket.on('uptavg', function (data) {
-          updateStack(average, data);
+          updateStack('avg-', average, data);
         });
       });
+
     </script>
   </body>
 </html>
