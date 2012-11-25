@@ -3,12 +3,12 @@ var budget = budget || {};
 budget.totalCategories = 6;
 
 budget.govData = {
-	"Health": 17,
-	"Education": 17,
-	"Social Protection": 17,
-	"Defense": 17,
-	"Debt Interest": 16,
-	"Other": 16
+	"Health": 19,
+	"Education": 13,
+	"Social Protection": 30,
+	"Defense": 6,
+	"Debt Interest": 7,
+	"Other": 25
 };
 
 budget.categories = {
