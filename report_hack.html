@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Budget Rewired</title>
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 10px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 60px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+    </style>
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="progress.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Budget Rewired</h1>
+        <h2>£683,000,000,000 (2011 - 2012)</h2>
+        <h3>Report</h3>
+      </div>
+
+      <div class="row">
+        <div id="user" class="container span12">
+          <h4>Your choice</h4>
+          <div class="row">
+            <div id="user-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="user-spending-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+        </div>
+
+        <div id="gov" class="container span12">
+          <h4>Government Spending</h4>
+          <div class="row">
+            <div id="gov-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="gov-spending-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+        </div>
+
+        <div id="average" class="container span12">
+          <h4>Average of all users</h4>
+          <div class="row">
+            <div id="avg-tax-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+          <div class="row">
+            <div id="avg-spending-overall" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/budget.js"></script>
+    <script type="text/javascript">
+      var createStack = function(categories, prefix, stack, data) {
+        var sum = 0;
+        for (var c in data) {
+          var value = data[c];
+          sum += +value;
+          var colourId = categories[c];
+
+          // Add to the overall
+          var stackedBar = budget.createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
+          stack.append(stackedBar);
+        }
+
+        if (sum !== +100) {
+          console.log('WARN: Had to tweak the average');
+        }
+      };
+
+      var updateStack = function(prefix, stack, data) {
+        var sum = 0;
+        for (var c in data) {
+          var value = data[c];
+          sum += +value;
+          var stackedBar = $('#' + prefix + 'stack' + c.replace(' ', '_')).width(value + '%');
+        }
+
+        if (sum !== +100) {
+          console.log('WARN: Had to tweak the average');
+        }
+      };
+
+      var socket = null;
+
+      $(document).ready(function() {
+        socket = io.connect(window.location.origin)
+
+        var user = $("#user-spending-overall");
+        var gov = $("#gov-spending-overall");
+        var average = $("#avg-spending-overall");
+
+        var usert = $("#user-tax-overall");
+        var govt = $("#gov-tax-overall");
+        var averaget = $("#avg-tax-overall");
+
+        createStack(budget.categories.spending, 'user-spending', user, submission.spending);
+        createStack(budget.categories.spending, 'gov-spending', gov, budget.govData.spending);
+
+        createStack(budget.categories.taxes, 'user-tax', usert, submission.taxes);
+        createStack(budget.categories.taxes, 'gov-tax', govt, budget.govData.taxes);
+
+        socket.on('setavg', function (data) {
+          average.empty();
+          averaget.empty();
+          createStack(budget.categories.spending, 'avg-spending', average, data.spending);
+          createStack(budget.categories.taxes, 'avg-taxes', averaget, data.taxes);
+        });
+
+        socket.on('uptavg', function (data) {
+          updateStack('avg-spending', average, data.spending);
+          updateStack('avg-taxes', averaget, data.taxes);
+        });
+      });
+
