@@ -211,7 +211,7 @@ io.sockets.on('connection', function (socket) {
 
 
 // Start listening (read port from arguments)
-var port = 1234;
+var port = 80;
 if (process.argv && process.argv[2])
 	port = process.argv[2];
 
