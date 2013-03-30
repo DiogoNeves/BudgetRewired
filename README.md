@@ -1,3 +1,5 @@
+# How To Use Budget Rewired
+  
 There are three main views in the application: **Vote**, **Report** and **Global**. Those views show the budget of 2012/2013.  
 The application works across multiple devices and updates in realtime (the server is slow so, it's a bit un-realtime, might fail to load a few times).  
   
