@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Budget Rewired</title>
+
+    <!-- Bootstrap -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 10px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 60px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      .spend-colour-1 {
+        background-color: #5EB95E !important;
+        background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#62C462),to(#57A957)) !important;
+        background-image: -webkit-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -o-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: linear-gradient(to bottom,#62C462,#57A957) !important;
+        background-repeat: repeat-x !important;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff57a957',GradientType=0) !important;
+      }
+
+      .spend-colour-2 {
+        background-color: #5EB95E !important;
+        background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#62C462),to(#57A957)) !important;
+        background-image: -webkit-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -o-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: linear-gradient(to bottom,#62C462,#57A957) !important;
+        background-repeat: repeat-x !important;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff57a957',GradientType=0) !important;
+      }
+
+      .spend-colour-3 {
+        background-color: #5EB95E !important;
+        background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#62C462),to(#57A957)) !important;
+        background-image: -webkit-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -o-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: linear-gradient(to bottom,#62C462,#57A957) !important;
+        background-repeat: repeat-x !important;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff57a957',GradientType=0) !important;
+      }
+
+      .spend-colour-4 {
+        background-color: #5EB95E !important;
+        background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#62C462),to(#57A957)) !important;
+        background-image: -webkit-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -o-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: linear-gradient(to bottom,#62C462,#57A957);
+        background-repeat: repeat-x !important;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff57a957',GradientType=0) !important;
+      }
+
+      .spend-colour-5 {
+        background-color: #5EB95E !important;
+        background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#62C462),to(#57A957)) !important;
+        background-image: -webkit-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -o-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: linear-gradient(to bottom,#62C462,#57A957) !important;
+        background-repeat: repeat-x !important;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff57a957',GradientType=0) !important;
+      }
+
+      .spend-colour-6 {
+        background-color: #5EB95E !important;
+        background-image: -moz-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -webkit-gradient(linear,0 0,0 100%,from(#62C462),to(#57A957)) !important;
+        background-image: -webkit-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: -o-linear-gradient(top,#62C462,#57A957) !important;
+        background-image: linear-gradient(to bottom,#62C462,#57A957) !important;
+        background-repeat: repeat-x !important;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462',endColorstr='#ff57a957',GradientType=0) !important;
+      }
+    </style>
+    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="jumbotron">
+        <h1>Budget Rewired</h1>
+        <h2>Global View</h2>
+        <h4>Yes, this is the first time we're testing with more than 2 people!</h4>
+      </div>
+
+      <div class="row">
+        <div id="gov" class="container span12">
+          <!-- <div class="row">
+            <div id="overall-tax" class="progress span12">
+            </div>
+          </div> -->
+
+          <h4>Government Spending</h4>
+          <div class="row">
+            <div id="gov-overall-spending" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+        </div>
+
+        <div id="average" class="container span12">
+          <!-- <div class="row">
+            <div id="overall-tax" class="progress span12">
+            </div>
+          </div> -->
+
+          <h4>Average of all users</h4>
+          <div class="row">
+            <div id="avg-overall-spending" class="progress span12" style="height: 30px">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="/budget.js"></script>
+    <script type="text/javascript">
+      var updateStack = function(prefix, stack, data) {
+        var sum = 0;
+        for (var c in data) {
+          var value = data[c];
+          sum += +value;
+          var stackedBar = $('#' + prefix + 'stack' + c.replace(' ', '_')).width(value + '%');
+        }
+
+        if (sum !== +100) {
+          console.log('WARN: Had to tweak the average');
+        }
+      };
+
+      var createStack = function(prefix, stack, data) {
+        var sum = 0;
+        for (var c in data) {
+          var value = data[c];
+          sum += +value;
+          var colourId = budget.categories.spending[c];
+
+          // Add to the overall
+          var stackedBar = budget.createStackBar(prefix + 'stack' + c.replace(' ', '_'), value, colourId);
+          stack.append(stackedBar);
+        }
+
+        if (sum !== +100) {
+          console.log('WARN: Had to tweak the average');
+        }
+      };
+
+      var socket = null;
+
+      $(document).ready(function() {
+        socket = io.connect(window.location.origin)
+
+        var gov = $("#gov-overall-spending");
+        var average = $("#avg-overall-spending");
+
+        createStack('gov-', gov, budget.govData);
+
+        socket.on('setavg', function (data) {
+          average.empty();
+          createStack('avg-', average, data);
+        });
+
+        socket.on('uptavg', function (data) {
+          updateStack('avg-', average, data);
+        });
+      });
+
+    </script>
+  </body>
+</html>
